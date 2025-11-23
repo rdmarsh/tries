@@ -6,6 +6,12 @@ This project adheres to the structure and spirit of
 Versioning is semantic-style but practical rather than strict
 
 ---
+### [4.1.6] - 2025-11-24
+### Added
+- added --sample-emails flag
+- added --rtl option, reverse token order (token mode only)
+
+---
 ### [4.1.5] - 2025-11-23
 ### Fixed
 - allow `-m ''` to not mark any nodes, overriding defaults

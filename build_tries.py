@@ -9,7 +9,7 @@
 #      * Character-level trie mode (default)
 #      * Delimiter-mode (token-mode) via -D/--delim
 #      * Hostname normalisation with --keep-prefix and --keep-fqdn
-#      * Sample data flags (--sample-hosts, --sample-ips, --sample-paths, --sample-urls, sample-nato)
+#      * Sample data flags (--sample-hosts, --sample-ips, --sample-paths, --sample-urls, --sample-emails, --sample-nato)
 #      * Combined input: samples + files + stdin
 #      * Theme loading, dumping, and saving support
 #
@@ -22,7 +22,7 @@ import unicodedata
 from pathlib import Path
 from typing import Dict, Iterable, List, Optional
 
-__version__ = "4.1.5"
+__version__ = "4.1.6"
 
 # ---------------------------------------------------------------------------
 # Default mark patterns
@@ -225,6 +225,7 @@ def build_trie(
     text_mark: Optional[str],
     text_head: Optional[str],
     delim: Optional[str],
+    rtl: bool,
 ):
 
     edges = set()
@@ -251,6 +252,10 @@ def build_trie(
             tokens = [t for t in raw.split(delim) if t]
             if not tokens:
                 continue
+
+            # Reverse token order if requested
+            if rtl:
+                tokens = list(reversed(tokens))
 
             token_labels = tokens
             tokens_norm = [t.lower() for t in tokens] if ignore_case else tokens
@@ -482,6 +487,15 @@ SAMPLE_URLS = [
     "https://portal.example.net/customers/acme",
 ]
 
+SAMPLE_EMAILS = [
+    "alice@example.com",
+    "fred@example.com",
+    "bob@acme.local",
+    "root@localhost",
+    "ops@internal.syd.acme",
+    "alerts+prod@company.net",
+]
+
 SAMPLE_NATO = [
     "acme",
     "brav",
@@ -595,6 +609,12 @@ def parse_args(argv=None):
     )
 
     parser.add_argument(
+        "--rtl",
+        action="store_true",
+        help="Reverse token order in --delim mode (e.g. email domains: com -> example -> user).",
+    )
+
+    parser.add_argument(
         "-o", "--output",
         help="Write DOT output to this file instead of stdout.",
     )
@@ -685,6 +705,11 @@ def parse_args(argv=None):
         "--sample-urls",
         action="store_true",
         help="Include built-in sample URLs.",
+    )
+    parser.add_argument(
+        "--sample-emails",
+        action="store_true",
+        help="Include built-in sample email addresses.",
     )
     parser.add_argument(
         "--sample-nato",
@@ -809,6 +834,8 @@ def main(argv=None):
         combined.extend(SAMPLE_PATHS)
     if args.sample_urls:
         combined.extend(SAMPLE_URLS)
+    if args.sample_emails:
+        combined.extend(SAMPLE_EMAILS)
     if args.sample_nato:
         combined.extend(SAMPLE_NATO)
 
@@ -868,6 +895,7 @@ def main(argv=None):
         text_mark=text_mark,
         text_head=text_head,
         delim=args.delim,
+        rtl=args.rtl,
     )
 
     dbg(args.debug, f"Final edge count: {len(edges)}")

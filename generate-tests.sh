@@ -49,6 +49,9 @@ run_test "hosts_keep_prefix_ignore_case"   --sample-hosts --keep-prefix --ignore
 run_test "hosts_keep_fqdn"                 --sample-hosts --keep-fqdn
 run_test "hosts_no_labels"                 --sample-hosts --no-labels
 
+#head sorting using nato
+run_test "nato_head"                       --sample-nato -H
+
 # head + no-labels (important behaviour case)
 run_test "hosts_head_no_labels"            --sample-hosts -H --no-labels
 
@@ -59,6 +62,7 @@ run_test "hosts_head_no_labels"            --sample-hosts -H --no-labels
 run_test "ips_token"                       --sample-ips -D .
 run_test "paths_token"                     --sample-paths -D /
 run_test "urls_token"                      --sample-urls -D /
+run_test "emails_token"                      --sample-emails -D @ --rtl
 
 # head-mode ignored in token-mode
 run_test "ips_token_head_ignored"          --sample-ips -D . -H

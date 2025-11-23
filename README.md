@@ -37,11 +37,13 @@ There are **no Python dependencies** to produce DOT output.
 - Windows `DOMAIN\host` prefix stripping (`--include-domain`)
 - Optional FQDN stripping (`--include-fqdn`)
 - Hide labels (`--no-labels`)
+- Reverse token order (token mode only `--rtl`)
 - Multiple sample datasets:
   - `--sample-hosts`
   - `--sample-ips`
   - `--sample-paths`
   - `--sample-urls`
+  - `--sample-emails`
   - `--sample-nato`
 - Automatically combines sample data + file input
 - Fully standalone, no imports beyond Python stdlib
@@ -424,6 +426,24 @@ Remove labels from terminal and head nodes:
 
 ```
 ./build_tries.py --no-labels
+```
+
+---
+
+### Right-to-Left Token Order (`--rtl`)
+
+Some structured strings are naturally hierarchical from the right rather than the left.  
+
+- `--rtl` only applies in **token mode** (`-D` is used).
+- Useful for emails, reversed domain names (DNS), reversed paths, or any right-to-left hierarchy.
+
+Using token mode (`-D`), the highest-level component appears *last*, so
+a normal left-to-right trie gives an inverted structure. The `--rtl`
+flag fixes this by reversing the token order **after splitting**,
+producing a more logical root.
+
+```
+./build_tries.py --sample-emails -D '@' --rtl
 ```
 
 ---
