@@ -124,6 +124,13 @@ This image was generated using:
     | dot -Tpng -o example_hosts.png
 ```
 
+This example demonstrates:
+- Default theme (`warm-sand`)
+- Head-nodes (`-H`), which formats the head node as a circle
+- Character-mode
+- Marking rules (`-m`), which marks nodes with the text as a different color
+- Built-in sample hosts dataset
+
 ### Paths
 
 ![Example Paths Trie Output](example_paths.png)
@@ -134,6 +141,12 @@ This image was generated using:
 ./build_tries.py --sample-paths -D "/" -m usr \
     | dot -Tpng -o example_paths.png
 ```
+
+This example demonstrates:
+- Default theme (`warm-sand`)
+- Token-mode (`-D`), for delimiter-based tries (Paths)
+- Marking rules (`-m`), which marks nodes with the text as a different color
+- Built-in sample paths dataset
 
 ### IPs
 
@@ -146,6 +159,12 @@ This image was generated using:
     | dot -Tpng -o example_ips.png
 ```
 
+This example demonstrates:
+- Default theme (`warm-sand`)
+- Token-mode (`-D`), for delimiter-based tries (IPs)
+- Marking rules (`-m`), which marks nodes with the text as a different color
+- Built-in sample IP dataset
+
 ### URLs
 
 ![Example HTML Trie Output](example_urls.png)
@@ -157,14 +176,11 @@ This image was generated using:
     | dot -Tpng -o example_urls.png
 ```
 
-These demonstrate:
-
-- The default theme (`warm-sand`)
-- Head-node highlighting (`-H`)
-- Character-mode
-- Token-mode (`-D`)
-- Marking (`-m`)
-- Sample datasets
+This example demonstrates:
+- Default theme (`warm-sand`)
+- Token-mode (`-D`), for delimiter-based tries (URLs)
+- Marking rules (`-m`), which marks nodes with the text as a different color
+- Built-in sample url dataset
 
 ---
 
