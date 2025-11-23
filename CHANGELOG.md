@@ -6,6 +6,15 @@ This project adheres to the structure and spirit of
 Versioning is semantic-style but practical rather than strict
 
 ---
+### [4.1.4] - 2025-11-24
+### Fixed
+- Corrected terminal-node rendering where a full hostname (e.g. `acmefw01`)
+  was incorrectly left as an internal point node when a longer variant
+  (e.g. `acmefw01-oob`) appeared later in the input.
+  Terminal nodes are now always upgraded to proper `Mrecord` nodes with labels
+  and colours applied after all prefixes are constructed.
+
+---
 ## [4.1.3] - 2025-11-23
 ### Added
 - sample-nato to list words to check sorting of head nodes

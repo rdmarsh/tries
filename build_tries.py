@@ -22,7 +22,7 @@ import unicodedata
 from pathlib import Path
 from typing import Dict, Iterable, List, Optional
 
-__version__ = "4.1.3"
+__version__ = "4.1.4"
 
 # ---------------------------------------------------------------------------
 # Default mark patterns
@@ -312,15 +312,20 @@ def build_trie(
         fill = color_mark if marked(base_norm) else color_normal
         text = text_mark if marked(base_norm) else text_normal
 
-        if base_norm not in node_meta:
-            nm = {"shape": "Mrecord"}
-            nm["label"] = "" if no_labels else label_text
-            if fill:
-                nm["style"] = "filled"
-                nm["fillcolor"] = fill
-            if text:
-                nm["fontcolor"] = text
-            node_meta[base_norm] = nm
+        # Ensure the full hostname is always a terminal node.
+        # If a prefix node already exists as a point (for example when
+        # "acmefw01-oob" is seen before "acmefw01"), upgrade it to a
+        # terminal Mrecord without disturbing existing edges.
+        existing = node_meta.get(base_norm)
+        nm = dict(existing) if existing else {}
+        nm["shape"] = "Mrecord"
+        nm["label"] = "" if no_labels else label_text
+        if fill:
+            nm["style"] = "filled"
+            nm["fillcolor"] = fill
+        if text:
+            nm["fontcolor"] = text
+        node_meta[base_norm] = nm
 
         # Build all prefix nodes first, then apply terminal styling
         parent = base_norm[0]
