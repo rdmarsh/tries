@@ -1,0 +1,72 @@
+# ------------------------------
+# Python bytecode / cache
+# ------------------------------
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pyc.*
+*.bak
+
+# ------------------------------
+# Virtualenvs
+# ------------------------------
+env/
+venv/
+.venv/
+
+# ------------------------------
+# macOS Finder junk
+# ------------------------------
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# ------------------------------
+# macOS metadata
+# ------------------------------
+._*
+.Spotlight-V100
+.Trashes
+
+# ------------------------------
+# Graphviz output
+# ------------------------------
+*.pdf
+*.png
+!example.png
+!example_hosts.png
+!example_paths.png
+!example_ips.png
+!example_urls.png
+*.svg
+*.dot
+
+# Keep exported examples out of git
+EXAMPLES/
+examples/
+
+# ------------------------------
+# User generated files
+# ------------------------------
+themes_custom.py
+
+# ------------------------------
+# Temporary files
+# ------------------------------
+*.tmp
+*.temp
+*.swp
+*.swo
+*.orig
+
+# ------------------------------
+# Logs
+# ------------------------------
+*.log
+
+# ------------------------------
+# Shell junk
+# ------------------------------
+*.sh~
+*.bash_history

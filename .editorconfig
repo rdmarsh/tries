@@ -1,0 +1,52 @@
+# Root EditorConfig for build-tries
+# Ensures consistent formatting across editors and IDEs.
+root = true
+
+# -------------------------------------------------------------------
+# Default rules for all files
+# -------------------------------------------------------------------
+[*]
+charset = utf-8
+indent_style = space
+indent_size = 4
+tab_width = 4
+
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# -------------------------------------------------------------------
+# Shell scripts (match your 2-space habits if desired)
+# But since your .vimrc uses 4 spaces everywhere, keep it consistent.
+# -------------------------------------------------------------------
+[*.sh]
+indent_style = space
+indent_size = 4
+
+# -------------------------------------------------------------------
+# Python files — strict 4-space indentation
+# -------------------------------------------------------------------
+[*.py]
+indent_style = space
+indent_size = 4
+
+# -------------------------------------------------------------------
+# Markdown files — allow flexibility but still trim whitespace
+# -------------------------------------------------------------------
+[*.md]
+indent_style = space
+indent_size = 4
+trim_trailing_whitespace = true
+
+# -------------------------------------------------------------------
+# Makefiles — MUST use tabs (required by make)
+# -------------------------------------------------------------------
+[Makefile]
+indent_style = tab
+indent_size = 4
+
+# -------------------------------------------------------------------
+# DOT files — follow the same indentation rules for readability
+# -------------------------------------------------------------------
+[*.dot]
+indent_style = space
+indent_size = 4
