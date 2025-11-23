@@ -432,15 +432,15 @@ Remove labels from terminal and head nodes:
 
 ### Right-to-Left Token Order (`--rtl`)
 
-Some structured strings are naturally hierarchical from the right rather than the left.  
+Some structured strings are naturally hierarchical from the right rather than the left
 
-- `--rtl` only applies in **token mode** (`-D` is used).
-- Useful for emails, reversed domain names (DNS), reversed paths, or any right-to-left hierarchy.
+- `--rtl` only applies in **token mode** (`-D` is used)
+- Useful for emails or domain names
 
 Using token mode (`-D`), the highest-level component appears *last*, so
 a normal left-to-right trie gives an inverted structure. The `--rtl`
 flag fixes this by reversing the token order **after splitting**,
-producing a more logical root.
+producing a more logical root
 
 ```
 ./build_tries.py --sample-emails -D '@' --rtl
