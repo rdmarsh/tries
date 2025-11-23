@@ -39,6 +39,7 @@ echo
 run_test "hosts_default"                   --sample-hosts
 run_test "hosts_TB"                        --sample-hosts -d TB
 run_test "hosts_head"                      --sample-hosts -H
+run_test "hosts_mark_nothing"              --sample-hosts -m ''
 run_test "hosts_mark_srv"                  --sample-hosts -m srv
 run_test "hosts_mark_fw_and_sw"            --sample-hosts -m fw sw
 run_test "hosts_filter_fw"                 --sample-hosts -f fw

@@ -22,7 +22,7 @@ import unicodedata
 from pathlib import Path
 from typing import Dict, Iterable, List, Optional
 
-__version__ = "4.1.4"
+__version__ = "4.1.5"
 
 # ---------------------------------------------------------------------------
 # Default mark patterns
@@ -483,32 +483,32 @@ SAMPLE_URLS = [
 ]
 
 SAMPLE_NATO = [
-	"acme",
-	"brav",
-	"char",
-	"delt",
-	"echo",
-	"foxt",
-	"gamm",
-	"hote",
-	"indi",
-	"juli",
-	"kilo",
-	"lima",
-	"mang",
-	"nove",
-	"osca",
-	"papa",
-	"quar",
-	"rome",
-	"sier",
-	"tang",
-	"umbr",
-	"vict",
-	"whis",
-	"xeno",
-	"yank",
-	"zulu",
+    "acme",
+    "brav",
+    "char",
+    "delt",
+    "echo",
+    "foxt",
+    "gamm",
+    "hote",
+    "indi",
+    "juli",
+    "kilo",
+    "lima",
+    "mang",
+    "nove",
+    "osca",
+    "papa",
+    "quar",
+    "rome",
+    "sier",
+    "tang",
+    "umbr",
+    "vict",
+    "whis",
+    "xeno",
+    "yank",
+    "zulu",
 ]
 
 
@@ -836,7 +836,12 @@ def main(argv=None):
     dbg(args.debug, f"Matched: {matched}")
 
     # Marking patterns
-    mark_is_default = (args.mark == DEFAULT_MARK_PATTERNS)
+    # Fix: If user passes -m '' (empty string), treat as "match nothing"
+    if args.mark == [""]:
+        effective_mark_patterns = []
+    else:
+        effective_mark_patterns = args.mark
+    mark_is_default = (effective_mark_patterns == DEFAULT_MARK_PATTERNS)
 
     dbg(args.debug, "Resolved colors & text:")
     dbg(args.debug, f"  normal={cn}, mark={cm}, head={ch}, edge={ce}, point={cp}")
@@ -849,7 +854,7 @@ def main(argv=None):
     # Build trie
     edges, node_meta = build_trie(
         matched,
-        mark_patterns=args.mark,
+        mark_patterns=effective_mark_patterns,
         mark_is_default=mark_is_default,
         head_mode=args.head,
         color_normal=cn,

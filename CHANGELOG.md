@@ -6,7 +6,12 @@ This project adheres to the structure and spirit of
 Versioning is semantic-style but practical rather than strict
 
 ---
-### [4.1.4] - 2025-11-24
+### [4.1.5] - 2025-11-23
+### Fixed
+- allow `-m ''` to not mark any nodes, overriding defaults
+
+---
+### [4.1.4] - 2025-11-23
 ### Fixed
 - Corrected terminal-node rendering where a full hostname (e.g. `acmefw01`)
   was incorrectly left as an internal point node when a longer variant
