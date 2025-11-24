@@ -43,6 +43,7 @@ run_test "hosts_mark_nothing"              --sample-hosts -m ''
 run_test "hosts_mark_srv"                  --sample-hosts -m srv
 run_test "hosts_mark_fw_and_sw"            --sample-hosts -m fw sw
 run_test "hosts_filter_fw"                 --sample-hosts -f fw
+run_test "hosts_filter_fw_invert"          --sample-hosts -f fw --invert-filter
 run_test "hosts_ignore_case"               --sample-hosts --ignore-case
 run_test "hosts_keep_prefix"               --sample-hosts --keep-prefix
 run_test "hosts_keep_prefix_ignore_case"   --sample-hosts --keep-prefix --ignore-case

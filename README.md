@@ -322,6 +322,25 @@ Filter text via regex:
 
 Filtering is case-insensitive.
 
+### Invert Filter (`--invert-filter`)
+
+Sometimes it’s easier to filter *out* patterns instead of matching them.
+
+Use `--invert-filter` to keep every line **not** matching `-f`:
+
+```
+./build_tries.py -f 'oob' --invert-filter
+```
+
+This keeps everything *except* lines containing “oob”.
+
+Useful for:
+
+- excluding environments  
+- excluding "oob" or "mgmt" hosts  
+- excluding high-noise patterns  
+- cleanup passes
+
 ---
 
 ## Marking Terminal Nodes

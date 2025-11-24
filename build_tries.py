@@ -22,7 +22,7 @@ import unicodedata
 from pathlib import Path
 from typing import Dict, Iterable, List, Optional
 
-__version__ = "4.1.6"
+__version__ = "4.2.0"
 
 # ---------------------------------------------------------------------------
 # Default mark patterns
@@ -392,6 +392,7 @@ def to_dot(
         attrs = dict(nodes[name])
         safe = dot_escape(name)
 
+        # Normal attributes
         if attrs.get("shape") == "point" and point_color:
             attrs.setdefault("color", point_color)
 
@@ -565,6 +566,12 @@ def parse_args(argv=None):
         "-f", "--filter",
         default=".*",
         help="Regex filter applied to input lines (case-insensitive).",
+    )
+
+    parser.add_argument(
+        "--invert-filter",
+        action="store_true",
+        help="Invert the regex filter: keep lines that do NOT match.",
     )
 
     parser.add_argument(
@@ -857,7 +864,13 @@ def main(argv=None):
     dbg(args.debug, f"Lines: {lines}")
 
     # Filtering
-    matched = filter_lines(lines, args.filter)
+    pat = re.compile(args.filter, re.IGNORECASE)
+
+    if args.invert_filter:
+        matched = [l for l in lines if not pat.search(l)]
+    else:
+        matched = [l for l in lines if pat.search(l)]
+
     dbg(args.debug, f"Filter regex: {args.filter}")
     dbg(args.debug, f"{len(matched)} lines matched filter.")
     dbg(args.debug, f"Matched: {matched}")
