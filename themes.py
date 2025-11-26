@@ -130,8 +130,8 @@ THEMES = {
         "edge": "gold3",
         "point": "gold3",
         "text_normal": "black",
-        "text_mark": "black",
-        "text_head": "black",
+        "text_mark": "white",
+        "text_head": "white",
     },
 
     "nightfall": {
@@ -174,7 +174,7 @@ THEMES = {
         "edge": "black",
         "point": "black",
         "text_normal": "black",
-        "text_mark": "black",
+        "text_mark": "white",
         "text_head": "white",
     },
 
@@ -182,6 +182,17 @@ THEMES = {
         "normal": None,
         "mark": None,
         "head": None,
+        "edge": None,
+        "point": None,
+        "text_normal": None,
+        "text_mark": None,
+        "text_head": None,
+    },
+
+    "highlight": {
+        "normal": None,
+        "mark": "yellow",
+        "head": "palegreen2",
         "edge": None,
         "point": None,
         "text_normal": None,
