@@ -22,7 +22,7 @@ import unicodedata
 from pathlib import Path
 from typing import Dict, Iterable, List, Optional
 
-__version__ = "4.2.1"
+__version__ = "4.2.2"
 
 # ---------------------------------------------------------------------------
 # Default mark patterns
@@ -232,9 +232,11 @@ def build_trie(
     node_meta: Dict[str, Dict[str, str]] = {}
 
     # Compile marking patterns
-    patterns = [p if (mark_is_default and p.endswith("$")) else p for p in mark_patterns]
     if mark_is_default:
-        patterns = [p if p.endswith("$") else p + "$" for p in patterns]
+        patterns = [p if p.endswith("$") else p + "$" for p in mark_patterns]
+    else:
+        patterns = mark_patterns
+
     mark_regex = [re.compile(p) for p in patterns]
 
     def marked(name: str) -> bool:
