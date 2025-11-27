@@ -22,7 +22,7 @@ import unicodedata
 from pathlib import Path
 from typing import Dict, Iterable, List, Optional
 
-__version__ = "4.2.0"
+__version__ = "4.2.1"
 
 # ---------------------------------------------------------------------------
 # Default mark patterns
@@ -235,7 +235,7 @@ def build_trie(
     patterns = [p if (mark_is_default and p.endswith("$")) else p for p in mark_patterns]
     if mark_is_default:
         patterns = [p if p.endswith("$") else p + "$" for p in patterns]
-    mark_regex = [re.compile(p, re.IGNORECASE) for p in patterns]
+    mark_regex = [re.compile(p) for p in patterns]
 
     def marked(name: str) -> bool:
         return any(p.search(name) for p in mark_regex)
@@ -536,7 +536,7 @@ def parse_args(argv=None):
         prog="build_tries.py",
         description=(
             "Build a character-level trie or token-based trie and emit Graphviz DOT.\n"
-            "Filtering (-f) and marking (-m) are case-insensitive.\n"
+            "Filtering (-f) and marking (-m) are case-sensitive.\n"
             "Supports themes, font families, hostname normalisation, and sample data.\n"
             "Graphviz is required to render the DOT output."
         ),
@@ -565,7 +565,7 @@ def parse_args(argv=None):
     parser.add_argument(
         "-f", "--filter",
         default=".*",
-        help="Regex filter applied to input lines (case-insensitive).",
+        help="Regex filter applied to input lines (case-sensitive).",
     )
 
     parser.add_argument(
@@ -578,7 +578,7 @@ def parse_args(argv=None):
         "-m", "--mark",
         nargs="*",
         default=list(DEFAULT_MARK_PATTERNS),
-        help="Regex patterns used to mark terminal nodes.",
+        help="Regex patterns used to mark terminal nodes (case-sensitive).",
     )
 
     parser.add_argument(
@@ -864,7 +864,7 @@ def main(argv=None):
     dbg(args.debug, f"Lines: {lines}")
 
     # Filtering
-    pat = re.compile(args.filter, re.IGNORECASE)
+    pat = re.compile(args.filter)
 
     if args.invert_filter:
         matched = [l for l in lines if not pat.search(l)]

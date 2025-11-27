@@ -6,13 +6,17 @@ This project adheres to the structure and spirit of
 Versioning is semantic-style but practical rather than strict
 
 ---
+## [4.2.1] - 2025-11-27
+### Changed
+- filter and match are now case sensitive
+
+---
 
 ## [4.2.0] – 2025-11-24
 ### Added
 - `--invert-filter` flag for negative filtering (select all non-matching lines)
 
 ### Changed
-
 - Calling feature comp
 
 ---

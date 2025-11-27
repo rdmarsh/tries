@@ -320,7 +320,7 @@ Filter text via regex:
 ./build_tries.py -f 'fw' servers.txt
 ```
 
-Filtering is case-insensitive.
+Filtering is case-sensitive.
 
 ### Invert Filter (`--invert-filter`)
 
@@ -357,7 +357,7 @@ Multiple patterns:
 ./build_tries.py -m 'oob$' 'fw$' 'lm[0-9][0-9]$' servers.txt
 ```
 
-Regex is case-insensitive by default.
+Regex is case-sensitive.
 
 ---
 
