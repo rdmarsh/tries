@@ -22,7 +22,7 @@ import unicodedata
 from pathlib import Path
 from typing import Dict, Iterable, List, Optional
 
-__version__ = "4.2.2"
+__version__ = "4.2.3"
 
 # ---------------------------------------------------------------------------
 # Default mark patterns
@@ -84,6 +84,23 @@ except Exception:
 
 # Always ensure one canonical "default"
 THEMES["default"] = THEMES.get("default", FALLBACK_THEMES["default"])
+
+# ---------------------------------------------------------------------------
+# Load external samples if present
+# ---------------------------------------------------------------------------
+
+try:
+    from samples import SAMPLES
+except Exception:
+    # samples.py missing – provide full placeholder groups
+    SAMPLES = {
+        "hosts":  ["samples_py","missing"],
+        "ips":    ["samples_py","missing"],
+        "paths":  ["samples_py","missing"],
+        "urls":   ["samples_py","missing"],
+        "emails": ["samples_py","missing"],
+        "nato":   ["samples_py","missing"],
+    }
 
 # ---------------------------------------------------------------------------
 # Debug helper
@@ -831,32 +848,33 @@ def main(argv=None):
         return
 
     # ----------------------------------------------------------------------
-    # Combine samples + files + stdin (Option C)
+    # Combine samples + files + stdin
     # ----------------------------------------------------------------------
+
+    sample_map = {
+        "sample_hosts": "hosts",
+        "sample_ips": "ips",
+        "sample_paths": "paths",
+        "sample_urls": "urls",
+        "sample_emails": "emails",
+        "sample_nato": "nato",
+    }
+
     combined = []
 
-    if args.sample_hosts:
-        combined.extend(SAMPLE_HOSTS)
-    if args.sample_ips:
-        combined.extend(SAMPLE_IPS)
-    if args.sample_paths:
-        combined.extend(SAMPLE_PATHS)
-    if args.sample_urls:
-        combined.extend(SAMPLE_URLS)
-    if args.sample_emails:
-        combined.extend(SAMPLE_EMAILS)
-    if args.sample_nato:
-        combined.extend(SAMPLE_NATO)
+    # Add sample groups
+    for flag, name in sample_map.items():
+        if getattr(args, flag):
+            combined.extend(SAMPLES.get(name, []))
 
+    # Add file input
     if args.files:
-        for line in read_lines(args.files):
-            combined.append(line)
+        combined.extend(read_lines(args.files))
 
-    if combined:
-        raw_lines = combined
-    else:
-        # No samples and no files: read stdin
-        raw_lines = read_lines(args.files)
+    # stdin fallback
+    raw_lines = combined if combined else read_lines(args.files)
+
+    # ----------------------------------------------------------------------
 
     # Strip and dedupe
     raw_lines = [line.strip() for line in raw_lines if line.strip()]

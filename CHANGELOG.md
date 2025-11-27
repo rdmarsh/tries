@@ -6,6 +6,11 @@ This project adheres to the structure and spirit of
 Versioning is semantic-style but practical rather than strict
 
 ---
+## [4.2.3] - 2025-11-28
+### Changed
+- Moved all sample data into samples.py
+
+---
 ## [4.2.2] - 2025-11-27
 ### Changed
 - Small improvement to compile marking patterns
