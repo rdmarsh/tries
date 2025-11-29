@@ -1,7 +1,7 @@
 # build_tries
 
-`build_tries` converts a list of hostnames, IPs, paths, or tokens into a
-**trie** and outputs **Graphviz DOT**.
+`build_tries` converts a list of hostnames, IPs, paths, or plain text lists into a
+**trie** and outputs Graphviz DOT text format.
 
 You can then use Graphviz to render the text output into PDF, PNG, SVG,
 etc.
@@ -16,6 +16,7 @@ It is useful for:
 - Analysing patterns in hostnames, IPs, or path structures
 - Documenting legacy naming schemes
 - Seeing structure that is usually hidden
+- Making interesting diagrams from plain text lists
 
 There are **no Python dependencies** to produce DOT output.
 
