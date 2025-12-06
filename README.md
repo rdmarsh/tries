@@ -1,12 +1,7 @@
 # tries
 
-<<<<<<< HEAD
-`build_tries` converts a list of hostnames, IPs, paths, or plain text lists into a
-**trie** and outputs Graphviz DOT text format.
-=======
 `tries` converts a list of hostnames, IPs, paths, or tokens into a
 **trie** and outputs **Graphviz DOT**.
->>>>>>> ecabdf7 (Release v4.3.0)
 
 You can then use Graphviz to render the text output into PDF, PNG, SVG,
 etc.
