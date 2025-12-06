@@ -6,6 +6,40 @@ This project adheres to the structure and spirit of
 Versioning is semantic-style but practical rather than strict
 
 ---
+## [4.3.0] - 2025-12-07
+### Added
+- New support-file loader using `runpy.run_path`, searching:
+  - `$HOME/.local/share/tries/<file>`
+  - `$PREFIX/share/tries/<file>` when PREFIX is set
+  - Current working directory
+- Installation now creates and populates a shared data directory (`SHAREDIR`) for themes and samples.
+
+### Changed
+- Renamed `build_tries.py` to **tries.py** for clarity and alignment with the installed executable name.
+- Updated `prog` metadata and all internal references to use `tries.py`.
+- Filtering with `-f` is now **case-sensitive** (removed automatic `re.IGNORECASE`).
+- Replaced old import-based external theme loading with unified loader.
+- Updated gallery and test generation scripts to use `tries.py`.
+- Updated README examples, installation notes, and command usage to reflect the rename.
+- Updated file headers in tries.py, themes.py, and samples.py.
+- Updated sample and theme loaders to merge fallback, installed, and custom definitions in correct order.
+
+### Improved
+- Custom theme saving now writes to the correct XDG/PREFIX location and reports the full resolved path.
+- Makefile installation now:
+  - Installs `tries` into `$PREFIX/bin`
+  - Installs `themes.py` and `samples.py` into `$SHAREDIR`
+- Makefile targets create `EXAMPLES` and `EXAMPLES/tests` when needed.
+- Gallery and test suite scripts updated with clearer messaging and directory handling.
+
+### Removed
+- Old `build_tries.py` naming in scripts, READMEs, and comments.
+- Implicit fallback behaviour that ignored case during filtering.
+
+### Fixed
+- Ensured custom themes always load after built-in and installed themes, matching expected override order.
+
+---
 ## [4.2.3] - 2025-11-28
 ### Changed
 - Moved all sample data into samples.py

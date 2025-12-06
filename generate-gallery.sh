@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-SCRIPT="./build_tries.py"
+SCRIPT="./tries.py"
 OUTDIR="EXAMPLES"
 
 mkdir -p "$OUTDIR"
 
 echo
 echo "=========================================="
-echo "  build_tries — THEME GALLERY"
+echo "  tries — THEME GALLERY"
 echo "=========================================="
 echo
 
@@ -26,6 +26,8 @@ for theme in "${THEMES[@]}"; do
 done
 
 echo
-echo "Theme gallery complete. Files written to ${OUTDIR}/"
+echo "- Theme gallery complete."
+echo
+echo "Examples: ${OUTDIR}/"
 echo "=========================================="
 echo

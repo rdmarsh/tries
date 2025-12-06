@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # encoding: utf-8
 
-#    build_tries.py
+#    tries.py
 #    DOT-only trie generator with theme, color, and per-node text color support.
 #    GPLv3 — David Marsh, 2019–2025
 #
@@ -19,10 +19,12 @@ import argparse
 import re
 import sys
 import unicodedata
+import os
+import runpy
 from pathlib import Path
 from typing import Dict, Iterable, List, Optional
 
-__version__ = "4.2.3"
+__version__ = "4.3.0"
 
 # ---------------------------------------------------------------------------
 # Default mark patterns
@@ -62,25 +64,50 @@ FALLBACK_FONTS = {
 }
 
 # ---------------------------------------------------------------------------
-# Load and merge external themes if present
+# Support file loader (XDG + PREFIX + cwd)
 # ---------------------------------------------------------------------------
 
-try:
-    from themes import THEMES as EXT_THEMES, FONT_MAP as EXT_FONTS
-    THEMES = {**FALLBACK_THEMES, **EXT_THEMES}
-    FONT_MAP = {**FALLBACK_FONTS, **EXT_FONTS}
+def load_support_file(name):
+    xdg = Path.home() / ".local" / "share" / "tries" / name
 
-    # Optional custom themes
-    try:
-        from themes_custom import THEMES as CUSTOM_THEMES
-        THEMES = {**THEMES, **CUSTOM_THEMES}
-    except Exception:
-        pass
+    prefix = Path(os.environ.get("PREFIX", Path.home()))
+    if prefix == Path.home():
+        prefix_share = xdg.parent
+    else:
+        prefix_share = prefix / "share" / "tries"
 
-except Exception:
+    candidates = [
+        xdg,
+        prefix_share / name,
+        Path.cwd() / name,
+    ]
+
+    for path in candidates:
+        if path.exists():
+            try:
+                return runpy.run_path(str(path))
+            except Exception:
+                pass
+    return None
+
+# ---------------------------------------------------------------------------
+# Load and merge themes
+# ---------------------------------------------------------------------------
+
+loaded = load_support_file("themes.py")
+
+if loaded and "THEMES" in loaded and "FONT_MAP" in loaded:
+    THEMES = {**FALLBACK_THEMES, **loaded["THEMES"]}
+    FONT_MAP = {**FALLBACK_FONTS, **loaded["FONT_MAP"]}
+else:
     # No external themes.py — fallback only
     THEMES = FALLBACK_THEMES
     FONT_MAP = FALLBACK_FONTS
+
+# custom themes
+loaded_custom = load_support_file("themes_custom.py")
+if loaded_custom and "THEMES" in loaded_custom:
+    THEMES = {**THEMES, **loaded_custom["THEMES"]}
 
 # Always ensure one canonical "default"
 THEMES["default"] = THEMES.get("default", FALLBACK_THEMES["default"])
@@ -89,9 +116,11 @@ THEMES["default"] = THEMES.get("default", FALLBACK_THEMES["default"])
 # Load external samples if present
 # ---------------------------------------------------------------------------
 
-try:
-    from samples import SAMPLES
-except Exception:
+loaded_samples = load_support_file("samples.py")
+
+if loaded_samples and "SAMPLES" in loaded_samples:
+    SAMPLES = loaded_samples["SAMPLES"]
+else:
     # samples.py missing – provide full placeholder groups
     SAMPLES = {
         "hosts":  ["samples_py","missing"],
@@ -136,7 +165,7 @@ def dot_escape(s: str) -> str:
     return s.translate(translate_map)
 
 # ---------------------------------------------------------------------------
-# Pretty dictionary dumper (zero dependencies)
+# Pretty dictionary dumper
 # ---------------------------------------------------------------------------
 
 def dump_python_dict(name, dct, indent=0):
@@ -201,7 +230,7 @@ def read_lines(files):
                 yield line.rstrip("\n")
 
 def filter_lines(lines, regex):
-    pat = re.compile(regex, re.IGNORECASE)
+    pat = re.compile(regex)
     return [l for l in lines if pat.search(l)]
 
 def resolve_theme_values(args):
@@ -218,15 +247,15 @@ def resolve_theme_values(args):
     # Font colors
     tn = args.text_normal or th.get("text_normal")
     tm = args.text_mark   or th.get("text_mark")
-    th = args.text_head   or th.get("text_head")
+    thh = args.text_head   or th.get("text_head")
 
-    return cn, cm, ch, ce, cp, tn, tm, th
+    return cn, cm, ch, ce, cp, tn, tm, thh
 
 # ---------------------------------------------------------------------------
 # Trie building
 # ---------------------------------------------------------------------------
 
-def build_trie(
+def trie(
     lines: Iterable[str],
     mark_patterns: List[str],
     mark_is_default: bool,
@@ -552,7 +581,7 @@ SAMPLE_NATO = [
 
 def parse_args(argv=None):
     parser = argparse.ArgumentParser(
-        prog="build_tries.py",
+        prog="tries.py",
         description=(
             "Build a character-level trie or token-based trie and emit Graphviz DOT.\n"
             "Filtering (-f) and marking (-m) are case-sensitive.\n"
@@ -793,7 +822,7 @@ def main(argv=None):
         return
 
     if args.version:
-        print(f"build_tries v{__version__}")
+        print(f"tries v{__version__}")
         return
 
     if args.list_themes:
@@ -824,7 +853,20 @@ def main(argv=None):
             "text_head": text_head,
         }
 
-        custom_path = Path("themes_custom.py")
+        # Determine correct install target (matches loader logic)
+        prefix_env = os.environ.get("PREFIX", None)
+        if prefix_env and prefix_env != str(Path.home()):
+            target_dir = Path(prefix_env) / "share" / "tries"
+        else:
+            xdg = os.environ.get("XDG_DATA_HOME")
+            if xdg:
+                target_dir = Path(xdg) / "tries"
+            else:
+                target_dir = Path.home() / ".local" / "share" / "tries"
+
+        target_dir.mkdir(parents=True, exist_ok=True)
+
+        custom_path = target_dir / "themes_custom.py"
         custom_themes = {}
 
         # Load existing custom themes if file exists
@@ -842,10 +884,12 @@ def main(argv=None):
             fp.write(dump_python_dict("THEMES", custom_themes))
             fp.write("\n")
 
-        print(f"Saved theme '{theme_name}' to themes_custom.py")
+        print(f"Saved theme '{theme_name}' to {custom_path.resolve()}")
+        print("This theme will now load automatically.")
 
         # **Do NOT continue into trie-building or DOT output**
         return
+
 
     # ----------------------------------------------------------------------
     # Combine samples + files + stdin
@@ -912,7 +956,7 @@ def main(argv=None):
         args.head = False
 
     # Build trie
-    edges, node_meta = build_trie(
+    edges, node_meta = trie(
         matched,
         mark_patterns=effective_mark_patterns,
         mark_is_default=mark_is_default,

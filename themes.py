@@ -1,6 +1,6 @@
 # ---------------------------------------------------------------------------
 # themes.py
-# Standalone theme + font definitions for build_tries.py
+# Standalone theme + font definitions for tries.py
 # ---------------------------------------------------------------------------
 
 THEMES = {

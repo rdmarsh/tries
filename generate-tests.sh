@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-SCRIPT="./build_tries.py"
+SCRIPT="./tries.py"
 OUTDIR="EXAMPLES"
 TESTDIR="${OUTDIR}/tests"
 
@@ -9,7 +9,7 @@ mkdir -p "$TESTDIR"
 
 echo
 echo "=========================================="
-echo "  build_tries — FEATURE TEST SUITE"
+echo "  tries — FEATURE TEST SUITE"
 echo "=========================================="
 echo
 
@@ -124,7 +124,6 @@ run_test "font_menlo" \
 echo
 echo "- Test suite complete."
 echo
-echo "Examples: ${OUTDIR}/"
 echo "Tests:    ${TESTDIR}/"
 echo "=========================================="
 echo

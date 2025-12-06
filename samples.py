@@ -1,6 +1,6 @@
 # ---------------------------------------------------------------------------
 # samples.py
-# Standalone sample data for build_tries.py
+# Standalone sample data for tries.py
 # ---------------------------------------------------------------------------
 
 SAMPLE_HOSTS = [

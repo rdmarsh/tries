@@ -1,7 +1,12 @@
-# build_tries
+# tries
 
+<<<<<<< HEAD
 `build_tries` converts a list of hostnames, IPs, paths, or plain text lists into a
 **trie** and outputs Graphviz DOT text format.
+=======
+`tries` converts a list of hostnames, IPs, paths, or tokens into a
+**trie** and outputs **Graphviz DOT**.
+>>>>>>> ecabdf7 (Release v4.3.0)
 
 You can then use Graphviz to render the text output into PDF, PNG, SVG,
 etc.
@@ -65,7 +70,7 @@ There are **no Python dependencies** to produce DOT output.
 
 ## Installation
 
-Just copy `build_tries.py` and optionally `themes.py` somewhere into your `$PATH`.
+Just copy `tries.py` and optionally `themes.py` somewhere into your `$PATH`.
 
 Requirements:
 
@@ -85,31 +90,31 @@ brew install graphviz
 Render a trie from a file:
 
 ```
-./build_tries.py servers.txt | dot -Tpdf -o trie.pdf
+./tries.py servers.txt | dot -Tpdf -o trie.pdf
 ```
 
 Render PNG:
 
 ```
-./build_tries.py servers.txt | dot -Tpng -o trie.png
+./tries.py servers.txt | dot -Tpng -o trie.png
 ```
 
 Read from STDIN:
 
 ```
-cat servers.txt | ./build_tries.py | dot -Tpng -o trie.png
+cat servers.txt | ./tries.py | dot -Tpng -o trie.png
 ```
 
 Print the version and exit:
 
 ```
-./build_tries.py --version
+./tries.py --version
 ```
 
 Enable debug logging:
 
 ```
-./build_tries.py --debug file.txt
+./tries.py --debug file.txt
 ```
 
 ---
@@ -123,7 +128,7 @@ Enable debug logging:
 This image was generated using:
 
 ```
-./build_tries.py --sample-hosts -H -m oob \
+./tries.py --sample-hosts -H -m oob \
     | dot -Tpng -o example_hosts.png
 ```
 
@@ -141,7 +146,7 @@ This example demonstrates:
 This image was generated using:
 
 ```
-./build_tries.py --sample-paths -D "/" -m usr \
+./tries.py --sample-paths -D "/" -m usr \
     | dot -Tpng -o example_paths.png
 ```
 
@@ -158,7 +163,7 @@ This example demonstrates:
 This image was generated using:
 
 ```
-./build_tries.py --sample-ips -D "." -m 192 \
+./tries.py --sample-ips -D "." -m 192 \
     | dot -Tpng -o example_ips.png
 ```
 
@@ -175,7 +180,7 @@ This example demonstrates:
 This image was generated using:
 
 ```
-./build_tries.py --sample-urls -D "/" -m login \
+./tries.py --sample-urls -D "/" -m login \
     | dot -Tpng -o example_urls.png
 ```
 
@@ -201,13 +206,13 @@ Themes define all colors for:
 List available themes:
 
 ```
-./build_tries.py --list-themes
+./tries.py --list-themes
 ```
 
 To use a theme, for example midnight:
 
 ```
-./build_tries.py --sample-hosts -T midnight | dot -Tpdf -o midnight.pdf
+./tries.py --sample-hosts -T midnight | dot -Tpdf -o midnight.pdf
 ```
 
 Generate a gallery:
@@ -221,7 +226,7 @@ Generate a gallery:
 You can save your current color and text overrides as a reusable theme:
 
 ```
-./build_tries.py \
+./tries.py \
     -cn lightskyblue1 \
     -cm mediumspringgreen \
     -ch royalblue3 \
@@ -239,14 +244,14 @@ This creates (or updates) `themes_custom.py` with a theme called
 You can then use it later:
 
 ```
-./build_tries.py --sample-hosts -T electric-dusk | dot -Tpng -o dusk.png
+./tries.py --sample-hosts -T electric-dusk | dot -Tpng -o dusk.png
 ```
 
 ---
 
 ## Colors and Fonts
 
-All colors used by build_tries.py - including theme colors and
+All colors used by tries.py - including theme colors and
 CLI overrides - use the X11 color palette supported by Graphviz.
 
 This means you can use any standard color name such as cornsilk2,
@@ -270,7 +275,7 @@ Override theme colors with:
 Example:
 
 ```
-./build_tries.py --sample -H -T warm-sand \
+./tries.py --sample -H -T warm-sand \
     -cn mistyrose -ch skyblue \
     | dot -Tpdf -o custom.pdf
 ```
@@ -286,7 +291,7 @@ Override per-node label colors:
 Example:
 
 ```
-./build_tries.py --sample -H -T nightfall -fh black \
+./tries.py --sample -H -T nightfall -fh black \
     | dot -Tpdf -o out.pdf
 ```
 
@@ -308,7 +313,7 @@ Use a safe cross-platform font family:
 Example:
 
 ```
-./build_tries.py --sample-hosts -F menlo | dot -Tpdf -o out.pdf
+./tries.py --sample-hosts -F menlo | dot -Tpdf -o out.pdf
 ```
 
 ---
@@ -318,7 +323,7 @@ Example:
 Filter text via regex:
 
 ```
-./build_tries.py -f 'fw' servers.txt
+./tries.py -f 'fw' servers.txt
 ```
 
 Filtering is case-sensitive.
@@ -330,7 +335,7 @@ Sometimes it’s easier to filter *out* patterns instead of matching them.
 Use `--invert-filter` to keep every line **not** matching `-f`:
 
 ```
-./build_tries.py -f 'oob' --invert-filter
+./tries.py -f 'oob' --invert-filter
 ```
 
 This keeps everything *except* lines containing “oob”.
@@ -349,13 +354,13 @@ Useful for:
 Use `--mark` (`-m`) with regex patterns:
 
 ```
-./build_tries.py -m 'prod$' servers.txt
+./tries.py -m 'prod$' servers.txt
 ```
 
 Multiple patterns:
 
 ```
-./build_tries.py -m 'oob$' 'fw$' 'lm[0-9][0-9]$' servers.txt
+./tries.py -m 'oob$' 'fw$' 'lm[0-9][0-9]$' servers.txt
 ```
 
 Regex is case-sensitive.
@@ -367,7 +372,7 @@ Regex is case-sensitive.
 To display the first character as a filled circle:
 
 ```
-./build_tries.py -H servers.txt
+./tries.py -H servers.txt
 ```
 
 ---
@@ -377,7 +382,7 @@ To display the first character as a filled circle:
 To treat upper and lower case as equivalent in the trie:
 
 ```
-./build_tries.py --ignore-case servers.txt
+./tries.py --ignore-case servers.txt
 ```
 
 This normalises internal trie IDs but keeps labels unchanged.
@@ -413,7 +418,7 @@ server02
 To keep the domain:
 
 ```
-./build_tries.py --include-domain
+./tries.py --include-domain
 ```
 
 ---
@@ -435,7 +440,7 @@ server01
 Keep the full FQDN:
 
 ```
-./build_tries.py --include-fqdn
+./tries.py --include-fqdn
 ```
 
 ---
@@ -445,7 +450,7 @@ Keep the full FQDN:
 Remove labels from terminal and head nodes:
 
 ```
-./build_tries.py --no-labels
+./tries.py --no-labels
 ```
 
 ---
@@ -463,7 +468,7 @@ flag fixes this by reversing the token order **after splitting**,
 producing a more logical root
 
 ```
-./build_tries.py --sample-emails -D '@' --rtl
+./tries.py --sample-emails -D '@' --rtl
 ```
 
 ---
@@ -477,11 +482,11 @@ The sample flags are useful for:
 - Ensuring Graphviz output works
 
 ```
-./build_tries.py --sample-hosts
-./build_tries.py --sample-ips
-./build_tries.py --sample-paths
-./build_tries.py --sample-urls
-./build_tries.py --sample-nato
+./tries.py --sample-hosts
+./tries.py --sample-ips
+./tries.py --sample-paths
+./tries.py --sample-urls
+./tries.py --sample-nato
 ```
 
 ---
@@ -515,7 +520,7 @@ dot -Tpdf -o trie.pdf
 ## Workflow Example
 
 ```
-./build_tries.py servers.txt -H -T safe \
+./tries.py servers.txt -H -T safe \
     | dot -Tpdf -o networks.pdf
 ```
 
