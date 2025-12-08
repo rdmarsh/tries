@@ -6,6 +6,11 @@ This project adheres to the structure and spirit of
 Versioning is semantic-style but practical rather than strict
 
 ---
+## [4.3.1] - 2025-12-08
+### Changed
+- Changed -m flag to -M
+
+---
 ## [4.3.0] - 2025-12-07
 ### Added
 - New support-file loader using `runpy.run_path`, searching:

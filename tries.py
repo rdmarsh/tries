@@ -584,7 +584,7 @@ def parse_args(argv=None):
         prog="tries.py",
         description=(
             "Build a character-level trie or token-based trie and emit Graphviz DOT.\n"
-            "Filtering (-f) and marking (-m) are case-sensitive.\n"
+            "Filtering (-f) and marking (-M) are case-sensitive.\n"
             "Supports themes, font families, hostname normalisation, and sample data.\n"
             "Graphviz is required to render the DOT output."
         ),
@@ -623,7 +623,7 @@ def parse_args(argv=None):
     )
 
     parser.add_argument(
-        "-m", "--mark",
+        "-M", "--mark",
         nargs="*",
         default=list(DEFAULT_MARK_PATTERNS),
         help="Regex patterns used to mark terminal nodes (case-sensitive).",
@@ -940,7 +940,7 @@ def main(argv=None):
     dbg(args.debug, f"Matched: {matched}")
 
     # Marking patterns
-    # Fix: If user passes -m '' (empty string), treat as "match nothing"
+    # Fix: If user passes -M '' (empty string), treat as "match nothing"
     if args.mark == [""]:
         effective_mark_patterns = []
     else:

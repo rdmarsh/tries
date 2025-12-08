@@ -123,7 +123,7 @@ Enable debug logging:
 This image was generated using:
 
 ```
-./tries.py --sample-hosts -H -m oob \
+./tries.py --sample-hosts -H -M oob \
     | dot -Tpng -o example_hosts.png
 ```
 
@@ -131,7 +131,7 @@ This example demonstrates:
 - Default theme (`warm-sand`)
 - Head-nodes (`-H`), which formats the head node as a circle
 - Character-mode
-- Marking rules (`-m`), which marks nodes with the text as a different color
+- Marking rules (`-M`), which marks nodes with the text as a different color
 - Built-in sample hosts dataset
 
 ### Paths
@@ -141,14 +141,14 @@ This example demonstrates:
 This image was generated using:
 
 ```
-./tries.py --sample-paths -D "/" -m usr \
+./tries.py --sample-paths -D "/" -M usr \
     | dot -Tpng -o example_paths.png
 ```
 
 This example demonstrates:
 - Default theme (`warm-sand`)
 - Token-mode (`-D`), for delimiter-based tries (Paths)
-- Marking rules (`-m`), which marks nodes with the text as a different color
+- Marking rules (`-M`), which marks nodes with the text as a different color
 - Built-in sample paths dataset
 
 ### IPs
@@ -158,14 +158,14 @@ This example demonstrates:
 This image was generated using:
 
 ```
-./tries.py --sample-ips -D "." -m 192 \
+./tries.py --sample-ips -D "." -M 192 \
     | dot -Tpng -o example_ips.png
 ```
 
 This example demonstrates:
 - Default theme (`warm-sand`)
 - Token-mode (`-D`), for delimiter-based tries (IPs)
-- Marking rules (`-m`), which marks nodes with the text as a different color
+- Marking rules (`-M`), which marks nodes with the text as a different color
 - Built-in sample IP dataset
 
 ### URLs
@@ -175,14 +175,14 @@ This example demonstrates:
 This image was generated using:
 
 ```
-./tries.py --sample-urls -D "/" -m login \
+./tries.py --sample-urls -D "/" -M login \
     | dot -Tpng -o example_urls.png
 ```
 
 This example demonstrates:
 - Default theme (`warm-sand`)
 - Token-mode (`-D`), for delimiter-based tries (URLs)
-- Marking rules (`-m`), which marks nodes with the text as a different color
+- Marking rules (`-M`), which marks nodes with the text as a different color
 - Built-in sample url dataset
 
 ---
@@ -346,16 +346,16 @@ Useful for:
 
 ## Marking Terminal Nodes
 
-Use `--mark` (`-m`) with regex patterns:
+Use `--mark` (`-M`) with regex patterns:
 
 ```
-./tries.py -m 'prod$' servers.txt
+./tries.py -M 'prod$' servers.txt
 ```
 
 Multiple patterns:
 
 ```
-./tries.py -m 'oob$' 'fw$' 'lm[0-9][0-9]$' servers.txt
+./tries.py -M 'oob$' 'fw$' 'lm[0-9][0-9]$' servers.txt
 ```
 
 Regex is case-sensitive.

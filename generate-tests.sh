@@ -39,9 +39,9 @@ echo
 run_test "hosts_default"                   --sample-hosts
 run_test "hosts_TB"                        --sample-hosts -d TB
 run_test "hosts_head"                      --sample-hosts -H
-run_test "hosts_mark_nothing"              --sample-hosts -m ''
-run_test "hosts_mark_srv"                  --sample-hosts -m srv
-run_test "hosts_mark_fw_and_sw"            --sample-hosts -m fw sw
+run_test "hosts_mark_nothing"              --sample-hosts -M ''
+run_test "hosts_mark_srv"                  --sample-hosts -M srv
+run_test "hosts_mark_fw_and_sw"            --sample-hosts -M fw sw
 run_test "hosts_filter_fw"                 --sample-hosts -f fw
 run_test "hosts_filter_fw_invert"          --sample-hosts -f fw --invert-filter
 run_test "hosts_ignore_case"               --sample-hosts --ignore-case
@@ -69,7 +69,7 @@ run_test "emails_token"                      --sample-emails -D @ --rtl
 run_test "ips_token_head_ignored"          --sample-ips -D . -H
 
 # deeper marking in token-mode
-run_test "paths_token_mark_share"          --sample-paths -D / -m share
+run_test "paths_token_mark_share"          --sample-paths -D / -M share
 
 # mixed-case token-mode + ignore-case
 run_test "paths_mixed_case_ignore"         --sample-paths -D / --ignore-case
