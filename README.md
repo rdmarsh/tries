@@ -58,7 +58,10 @@ There are **no Python dependencies** to produce DOT output.
   - `text_head`
 - Cross-platform safe font choices
 - Case-insensitive filtering and marking
-- Included theme-gallery generator script
+- Theme gallery generator (`generate-gallery.sh`)
+- Feature example renderer (`generate-examples.sh`)
+- Behaviour test suite (`test_tries.py`, no Graphviz needed)
+- Man page (`tries.1`)
 - Simple `--version` flag and `--debug` output
 
 ---
