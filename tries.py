@@ -24,7 +24,7 @@ import runpy
 from pathlib import Path
 from typing import Dict, Iterable, List, Optional
 
-__version__ = "4.3.0"
+__version__ = "4.3.1"
 
 # ---------------------------------------------------------------------------
 # Default mark patterns
@@ -86,8 +86,8 @@ def load_support_file(name):
         if path.exists():
             try:
                 return runpy.run_path(str(path))
-            except Exception:
-                pass
+            except Exception as e:
+                sys.stderr.write(f"[warn] could not load {path}: {e}\n")
     return None
 
 # ---------------------------------------------------------------------------
@@ -112,24 +112,6 @@ if loaded_custom and "THEMES" in loaded_custom:
 # Always ensure one canonical "default"
 THEMES["default"] = THEMES.get("default", FALLBACK_THEMES["default"])
 
-# ---------------------------------------------------------------------------
-# Load external samples if present
-# ---------------------------------------------------------------------------
-
-loaded_samples = load_support_file("samples.py")
-
-if loaded_samples and "SAMPLES" in loaded_samples:
-    SAMPLES = loaded_samples["SAMPLES"]
-else:
-    # samples.py missing – provide full placeholder groups
-    SAMPLES = {
-        "hosts":  ["samples_py","missing"],
-        "ips":    ["samples_py","missing"],
-        "paths":  ["samples_py","missing"],
-        "urls":   ["samples_py","missing"],
-        "emails": ["samples_py","missing"],
-        "nato":   ["samples_py","missing"],
-    }
 
 # ---------------------------------------------------------------------------
 # Debug helper
@@ -229,9 +211,6 @@ def read_lines(files):
             for line in f:
                 yield line.rstrip("\n")
 
-def filter_lines(lines, regex):
-    pat = re.compile(regex)
-    return [l for l in lines if pat.search(l)]
 
 def resolve_theme_values(args):
     parser = args._parser
@@ -471,7 +450,7 @@ def to_dot(
         out.append(f'  "{dot_escape(p)}" -- "{dot_escape(c)}";')
 
     out.append("}")
-    return "\n".join(out)
+    return "\n".join(out) + "\n"
 
 # ---------------------------------------------------------------------------
 # Sample data
@@ -574,6 +553,14 @@ SAMPLE_NATO = [
     "zulu",
 ]
 
+SAMPLES = {
+    "hosts":  SAMPLE_HOSTS,
+    "ips":    SAMPLE_IPS,
+    "paths":  SAMPLE_PATHS,
+    "urls":   SAMPLE_URLS,
+    "emails": SAMPLE_EMAILS,
+    "nato":   SAMPLE_NATO,
+}
 
 # ---------------------------------------------------------------------------
 # Argument parser
@@ -871,9 +858,12 @@ def main(argv=None):
 
         # Load existing custom themes if file exists
         if custom_path.exists():
-            namespace = {}
-            exec(custom_path.read_text(), namespace)
-            custom_themes = namespace.get("THEMES", {})
+            try:
+                existing = runpy.run_path(str(custom_path))
+                custom_themes = existing.get("THEMES", {})
+            except Exception as e:
+                sys.stderr.write(f"[warn] could not load {custom_path}: {e}\n")
+                custom_themes = {}
 
         # Update / add the new theme
         custom_themes[theme_name] = data

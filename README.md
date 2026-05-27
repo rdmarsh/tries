@@ -213,7 +213,7 @@ To use a theme, for example midnight:
 Generate a gallery:
 
 ```
-./generate-theme-gallery.sh
+./generate-gallery.sh
 ```
 
 ### Custom Themes
@@ -517,6 +517,46 @@ dot -Tpdf -o trie.pdf
 ```
 ./tries.py servers.txt -H -T safe \
     | dot -Tpdf -o networks.pdf
+```
+
+---
+
+## Development
+
+### Running the tests
+
+`test_tries.py` is the behaviour test suite. It imports `tries` directly and asserts on DOT output — no Graphviz required.
+
+```
+python3 test_tries.py
+```
+
+Or with pytest if you have it installed:
+
+```
+pytest test_tries.py -v
+```
+
+Or via make:
+
+```
+make test
+```
+
+### Generating examples
+
+`generate-examples.sh` renders the feature examples to `EXAMPLES/tests/` as DOT and PNG. Requires Graphviz.
+
+```
+make examples
+```
+
+### Generating the theme gallery
+
+`generate-gallery.sh` renders all themes to `EXAMPLES/` as PDFs. Requires Graphviz.
+
+```
+./generate-gallery.sh
 ```
 
 ---
