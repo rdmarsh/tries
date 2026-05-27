@@ -1,14 +1,49 @@
 # Changelog
-All notable changes to **build_tries** are documented here
+All notable changes to **tries** are documented here
 
 This project adheres to the structure and spirit of
 [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 Versioning is semantic-style but practical rather than strict
 
 ---
+
+## [5.0.0] - 2026-05-27
+### Added
+- Man page (`tries.1`) installed to `$PREFIX/share/man/man1/`
+- Makefile: `make test` runs the behaviour test suite
+- Makefile: `make examples` replaces the old `make tests` target
+- README: Installation section with curl one-liner and `make install` instructions
+- README: Development section documenting `make test`, `make examples`, `make gallery`
+
+### Fixed
+- README: stale flag names corrected (`--include-domain` → `--keep-prefix`,
+  `--include-fqdn` → `--keep-fqdn`, `--sample` → `--sample-hosts`, `-fh` → `-th`)
+- README: stale `generate-theme-gallery.sh` reference corrected to `generate-gallery.sh`
+
+---
+
 ## [4.3.1] - 2025-12-08
+### Added
+- `test_tries.py`: 32 behaviour tests using `unittest`. Imports `tries` directly
+  and asserts on DOT output. No Graphviz required. Covers character mode, token
+  mode, filtering, marking, themes, and all CLI info flags.
+
 ### Changed
-- Changed -m flag to -M
+- Changed `-m` flag to `-M`
+- `generate-tests.sh` renamed to `generate-examples.sh` — the script renders
+  feature examples, it does not assert anything
+- Makefile targets: `tests` → `examples`, `unittest` → `test`
+
+### Fixed
+- `__version__` was stale at `4.3.0`; bumped to match CHANGELOG
+- `samples.py` deleted: inline `SAMPLE_*` constants in `tries.py` were never
+  wired into the `SAMPLES` fallback; fixed wiring and removed the file
+- `filter_lines()` removed: was defined but never called
+- `load_support_file()` no longer swallows exceptions silently — bad support
+  files now emit a `[warn]` message to stderr
+- `--save-theme` was using `exec()` to reload `themes_custom.py`; now uses
+  `runpy.run_path()` consistently with the rest of the loader
+- DOT output now ends with a trailing newline
 
 ---
 ## [4.3.0] - 2025-12-07

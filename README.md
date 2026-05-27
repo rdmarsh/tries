@@ -35,8 +35,8 @@ There are **no Python dependencies** to produce DOT output.
 - Per-node color overrides
 - Per-node text color overrides
 - Case-insensitive tries (`--ignore-case`)
-- Windows `DOMAIN\host` prefix stripping (`--include-domain`)
-- Optional FQDN stripping (`--include-fqdn`)
+- Windows `DOMAIN\host` prefix stripping (`--keep-prefix`)
+- Optional FQDN stripping (`--keep-fqdn`)
 - Hide labels (`--no-labels`)
 - Reverse token order (token mode only `--rtl`)
 - Multiple sample datasets:
@@ -65,17 +65,68 @@ There are **no Python dependencies** to produce DOT output.
 
 ## Installation
 
-Just copy `tries.py` and optionally `themes.py` somewhere into your `$PATH`.
-
-Requirements:
-
+**Requirements:**
 - Python 3.6+
-- Graphviz (only for rendering)
+- Graphviz (only for rendering — not required to produce DOT output)
 
-macOS install:
+Install Graphviz on macOS:
 
 ```
 brew install graphviz
+```
+
+### Quick install (single file)
+
+`tries` is a single Python script with no dependencies. The quickest way to
+install it is to copy it somewhere in your `$PATH`:
+
+```
+curl -o ~/.local/bin/tries \
+    https://raw.githubusercontent.com/rdmarsh/tries/main/tries.py
+chmod +x ~/.local/bin/tries
+```
+
+This gives you the base tool. For the full theme set, also install `themes.py`:
+
+```
+mkdir -p ~/.local/share/tries
+curl -o ~/.local/share/tries/themes.py \
+    https://raw.githubusercontent.com/rdmarsh/tries/main/themes.py
+```
+
+### Install with make
+
+Clone the repo and use the Makefile:
+
+```
+git clone https://github.com/rdmarsh/tries.git
+cd tries
+make install
+```
+
+This installs:
+- `tries` → `$PREFIX/bin/tries`
+- `themes.py` → `$PREFIX/share/tries/themes.py`
+- `tries.1` → `$PREFIX/share/man/man1/tries.1`
+
+Default `PREFIX` is `$HOME`. Override it:
+
+```
+make install PREFIX=/usr/local
+```
+
+Uninstall:
+
+```
+make uninstall
+```
+
+### Man page
+
+After `make install`, the man page is available:
+
+```
+man tries
 ```
 
 ---
@@ -270,7 +321,7 @@ Override theme colors with:
 Example:
 
 ```
-./tries.py --sample -H -T warm-sand \
+./tries.py --sample-hosts -H -T warm-sand \
     -cn mistyrose -ch skyblue \
     | dot -Tpdf -o custom.pdf
 ```
@@ -286,7 +337,7 @@ Override per-node label colors:
 Example:
 
 ```
-./tries.py --sample -H -T nightfall -fh black \
+./tries.py --sample-hosts -H -T nightfall -th black \
     | dot -Tpdf -o out.pdf
 ```
 
@@ -410,10 +461,10 @@ server01
 server02
 ```
 
-To keep the domain:
+To keep the domain prefix:
 
 ```
-./tries.py --include-domain
+./tries.py --keep-prefix
 ```
 
 ---
@@ -435,7 +486,7 @@ server01
 Keep the full FQDN:
 
 ```
-./tries.py --include-fqdn
+./tries.py --keep-fqdn
 ```
 
 ---

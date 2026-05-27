@@ -3,12 +3,12 @@
 .PHONY: all help gallery examples test clean install uninstall
 
 # Default target
-all: gallery examples
+all: test gallery examples
 
 help:
 	@echo "Available targets:"
 	@echo
-	@echo "  make            Run gallery + examples (default)"
+	@echo "  make            Run tests + gallery + examples (default)"
 	@echo "  make gallery    Generate theme PDFs into EXAMPLES/"
 	@echo "  make examples   Render feature examples into EXAMPLES/tests/"
 	@echo "  make test       Run the behaviour test suite (no Graphviz needed)"
@@ -43,24 +43,32 @@ BINDIR := $(PREFIX)/bin
 
 ifeq ($(PREFIX),$(HOME))
     SHAREDIR := $(HOME)/.local/share/tries
+    MANDIR   := $(HOME)/.local/share/man/man1
 else
     SHAREDIR := $(PREFIX)/share/tries
+    MANDIR   := $(PREFIX)/share/man/man1
 endif
 
 install:
 	mkdir -p "$(BINDIR)"
 	mkdir -p "$(SHAREDIR)"
+	mkdir -p "$(MANDIR)"
 
 	# Install main executable
 	install -m 755 tries.py "$(BINDIR)/tries"
 
 	# Support files
-	install -m 644 themes.py  "$(SHAREDIR)/themes.py"
+	install -m 644 themes.py "$(SHAREDIR)/themes.py"
+
+	# Man page
+	install -m 644 tries.1 "$(MANDIR)/tries.1"
 
 	@echo "Installed tries to $(BINDIR)/tries"
 	@echo "Installed support files to $(SHAREDIR)"
+	@echo "Installed man page to $(MANDIR)/tries.1"
 
 uninstall:
 	$(RM) "$(BINDIR)/tries"
 	$(RM) "$(SHAREDIR)/themes.py"
+	$(RM) "$(MANDIR)/tries.1"
 	@echo "Removed tries and support files"

@@ -1,0 +1,279 @@
+.TH TRIES 1 "May 2026" "tries 5.0.0" "User Commands"
+
+
+.SH NAME
+tries \- build a character or token trie from text and emit Graphviz DOT
+
+.SH SYNOPSIS
+.B tries
+[\fIOPTIONS\fR] [\fIfile\fR ...]
+
+.SH DESCRIPTION
+.B tries
+reads lines of text from files or standard input and builds a trie
+(prefix tree), emitting the result as Graphviz DOT to standard output.
+
+In the default character mode each character is a node.
+In token mode
+.RB ( \-D )
+each delimited segment is a node, which is better suited to IPs, paths,
+and URLs.
+
+Graphviz
+.RB ( dot )
+is required only to render the DOT output into PDF, PNG, or SVG.
+.B tries
+itself has no Python dependencies beyond the standard library.
+
+.SH OPTIONS
+
+.SS Input
+.TP
+.I file ...
+One or more input files. If omitted, read from standard input unless a
+.B \-\-sample\-*
+flag is used.
+
+.TP
+.B \-\-sample\-hosts
+Include built-in sample hostnames.
+
+.TP
+.B \-\-sample\-ips
+Include built-in sample IPv4 addresses.
+
+.TP
+.B \-\-sample\-paths
+Include built-in sample UNIX directory paths.
+
+.TP
+.B \-\-sample\-urls
+Include built-in sample URLs.
+
+.TP
+.B \-\-sample\-emails
+Include built-in sample email addresses.
+
+.TP
+.B \-\-sample\-nato
+Include built-in sample NATO phonetic words.
+
+Sample flags may be combined with each other and with file or stdin input.
+
+.SS Filtering
+.TP
+.BI \-f " REGEX" ", \-\-filter " REGEX
+Keep only lines matching REGEX (case-sensitive). Default: \fB.*\fR (keep all).
+
+.TP
+.B \-\-invert\-filter
+Invert the filter: keep lines that do \fInot\fR match.
+
+.SS Trie mode
+.TP
+.BI \-D " CHAR" ", \-\-delim " CHAR
+Split each input line on CHAR and build a token-based trie instead of a
+character-level trie. Use \fB.\fR for IPs, \fB/\fR for paths and URLs,
+\fB@\fR for emails.
+
+.TP
+.B \-\-rtl
+Reverse token order after splitting. Only applies in token mode.
+Useful for email addresses and domain names where the hierarchy reads
+right-to-left (e.g.\& \fBcom \(-> example \(-> user\fR).
+
+.SS Marking
+.TP
+.BI \-M " PATTERN" " [" PATTERN " ...]" ", \-\-mark " PATTERN " ..."
+Regex patterns used to mark terminal nodes with the mark colour.
+Case-sensitive. Defaults:
+.BR new ", " old ", " oob ", " ilo ", " trap ", " traps ", " "lm[0-9][0-9]$" .
+Pass \fB\-M ''\fR to disable all marking.
+
+.SS Normalisation
+.TP
+.B \-\-keep\-prefix
+Keep the Windows \fBDOMAIN\e\fRhost prefix. Default is to strip it.
+
+.TP
+.B \-\-keep\-fqdn
+Keep the full DNS name. Default is to strip everything after the first dot
+(e.g.\& \fBserver01.domain.local\fR becomes \fBserver01\fR).
+
+.TP
+.BI \-i ", \-\-ignore\-case"
+Normalise internal node IDs to lowercase. Labels retain their original case.
+
+.SS Display
+.TP
+.B \-H ", \-\-head"
+Render the first-character node as a filled circle. Ignored in token mode.
+
+.TP
+.B \-\-no\-labels
+Remove labels from terminal and head nodes.
+
+.TP
+.BI \-d " {LR,TB}" ", \-\-dir " {LR,TB}
+Graph direction. \fBLR\fR = left-to-right (default), \fBTB\fR = top-to-bottom.
+
+.SS Output
+.TP
+.BI \-o " FILE" ", \-\-output " FILE
+Write DOT output to FILE instead of standard output.
+
+.SS Themes and colours
+.TP
+.BI \-T " NAME" ", \-\-theme " NAME
+Apply a named colour theme. Use \fB\-\-list\-themes\fR to see available names.
+Default: \fBdefault\fR.
+
+.TP
+.BI \-F " NAME" ", \-\-font " NAME
+Font family for node labels. Choices:
+.BR courier ", " courier-new ", " dejavu ", " liberation ", " nimbus ", " helvetica ", " menlo ", " consolas .
+Default: \fBcourier\fR.
+
+.TP
+.BI \-cn " COLOUR" ", \-\-color\-normal " COLOUR
+Override the theme colour for normal terminal nodes.
+
+.TP
+.BI \-cm " COLOUR" ", \-\-color\-mark " COLOUR
+Override the theme colour for marked terminal nodes.
+
+.TP
+.BI \-ch " COLOUR" ", \-\-color\-head " COLOUR
+Override the theme colour for head nodes.
+
+.TP
+.BI \-ce " COLOUR" ", \-\-color\-edge " COLOUR
+Override the theme colour for edges.
+
+.TP
+.BI \-cp " COLOUR" ", \-\-color\-point " COLOUR
+Override the theme colour for internal point nodes.
+
+.TP
+.BI \-tn " COLOUR" ", \-\-text\-normal " COLOUR
+Override the label text colour for normal terminal nodes.
+
+.TP
+.BI \-tm " COLOUR" ", \-\-text\-mark " COLOUR
+Override the label text colour for marked terminal nodes.
+
+.TP
+.BI \-th " COLOUR" ", \-\-text\-head " COLOUR
+Override the label text colour for head nodes.
+
+All colours use the X11/Graphviz palette (e.g.\& \fBcornsilk2\fR,
+\fBpalegreen3\fR, \fBroyalblue3\fR). See
+.UR https://graphviz.org/doc/info/colors.html
+.UE .
+
+.SS Theme management
+.TP
+.B \-\-list\-themes
+List available theme names and exit.
+
+.TP
+.B \-\-dump\-themes
+Print the merged THEMES and FONT_MAP dicts to stdout and exit. Useful as a
+starting point for a custom \fBthemes.py\fR.
+
+.TP
+.BI \-\-save\-theme " NAME"
+Save the current colour and font settings as a reusable theme called NAME.
+Writes to \fBthemes_custom.py\fR in the XDG data directory
+(\fB~/.local/share/tries/\fR by default).
+
+.SS Info
+.TP
+.B \-\-version
+Print version and exit.
+
+.TP
+.B \-\-debug
+Write debug information to standard error.
+
+.SH EXAMPLES
+Build a trie from a file and render to PDF:
+.PP
+.RS
+.EX
+tries servers.txt | dot \-Tpdf \-o trie.pdf
+.EE
+.RE
+
+Use the built-in hostname sample with head nodes and midnight theme:
+.PP
+.RS
+.EX
+tries \-\-sample\-hosts \-H \-T midnight | dot \-Tpng \-o hosts.png
+.EE
+.RE
+
+Token-mode trie of IP addresses split on dots:
+.PP
+.RS
+.EX
+tries \-\-sample\-ips \-D . | dot \-Tpdf \-o ips.pdf
+.EE
+.RE
+
+Emails in reverse token order (domain \(-> user):
+.PP
+.RS
+.EX
+tries \-\-sample\-emails \-D @ \-\-rtl | dot \-Tpng \-o emails.png
+.EE
+.RE
+
+Filter to firewall hosts only, marking out-of-band nodes:
+.PP
+.RS
+.EX
+tries \-f fw \-M oob servers.txt | dot \-Tpdf \-o fw.pdf
+.EE
+.RE
+
+Save a custom theme:
+.PP
+.RS
+.EX
+tries \-cn lightskyblue1 \-cm mediumspringgreen \-ch royalblue3 \e
+    \-\-save\-theme electric\-dusk
+.EE
+.RE
+
+.SH FILES
+.TP
+.I ~/.local/share/tries/themes.py
+Installed theme and font definitions. Merged over the built-in defaults.
+
+.TP
+.I ~/.local/share/tries/themes_custom.py
+User-defined custom themes written by \fB\-\-save\-theme\fR.
+
+.SH ENVIRONMENT
+.TP
+.B PREFIX
+If set to a path other than \fB$HOME\fR, support files are loaded from
+\fI$PREFIX/share/tries/\fR instead of the XDG data directory.
+
+.TP
+.B XDG_DATA_HOME
+Overrides the XDG base directory for support files (default:
+\fI~/.local/share\fR).
+
+.SH AUTHOR
+David Marsh
+
+.SH LICENSE
+GPLv3
+.UR https://www.gnu.org/licenses/gpl-3.0.html
+.UE
+
+.SH SEE ALSO
+.BR dot (1),
+.BR graphviz (1)
