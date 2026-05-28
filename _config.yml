@@ -1,0 +1,5 @@
+theme: jekyll-theme-cayman
+title: tries
+description: A standalone Python tool for visualising structured strings by generating Graphviz DOT tries
+github:
+  repository_url: https://github.com/rdmarsh/tries
